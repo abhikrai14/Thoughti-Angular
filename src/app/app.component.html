@@ -1,0 +1,66 @@
+<div class="container mt-3">
+  <div class="row field-container">
+    <span class="span-tag">User Tasks</span>
+    <div class="col-sm-12 inside-field mt-5">
+      <form [formGroup]="TaskForm">
+        <div class="row m-3">
+          <div class="col-sm-3 form-group">
+            <input placeholder="Task Description" #myInput [maxlength]="maxChars" formControlName="Task"
+              class="form-control" [ngClass]="{
+                'is-invalid': submitted && taskControls.Task.errors,
+                'is-valid': taskControls.Task.touched && !taskControls.Task.errors
+              }">
+
+            <div class="d-flex justify-content-between text-under">
+              Task
+              <span>{{ myInput.value.length }} /{{ maxChars }}</span>
+            </div>
+          </div>
+          <div class="col-sm-3 form-group">
+            <input type="date" formControlName="Expiry_date" class="form-control" [ngClass]="{
+              'is-invalid': submitted && taskControls.Expiry_date.errors,
+              'is-valid': taskControls.Expiry_date.touched && !taskControls.Expiry_date.errors
+            }">
+            <div class="text-under">Expiry Date</div>
+          </div>
+          <div class="col-sm-3 form-group">
+            <ng-select [items]="TaskData?.Users" placeholder="Select" formControlName="User">
+            </ng-select>
+            <div class="text-under">Users</div>
+          </div>
+          <div class="col-sm-1 form-group text-center">
+            <i *ngIf="taskImportant" class="fa fa-flag fa-2x defaultCursor" (click)="important(false)"></i>
+            <i *ngIf="!taskImportant" class="fa fa-flag-o fa-2x defaultCursor" (click)="important(true)"></i> <br>
+            <div class="text-under mt-1">Important</div>
+          </div>
+          <div class="col-sm-2 text-center">
+            <button class="btn" (click)="submitTask()">Submit</button>
+          </div>
+        </div>
+      </form>
+
+      <hr />
+      <table class="table table-bordered table-striped">
+        <thead>
+          <th>Task</th>
+          <th>Expiry Date</th>
+          <th>Users</th>
+          <th>Important</th>
+          <th>Action</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of TaskData.Tasks; let i= index">
+            <td>{{ data?.Task }}</td>
+            <td>{{ data?.Expiry_date }}</td>
+            <td>
+              <ng-select [items]="TaskData?.Users" [placeholder]="data?.User">
+              </ng-select>
+            </td>
+            <td>{{ data?.Important }}</td>
+            <td><i (click)="remove(i)" class="fa fa-minus-circle defaultCursor" aria-hidden="true"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
